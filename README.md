@@ -16,11 +16,11 @@
 
 ### Build and Install
 
-    ```sh
-    # 适用于 centos7
-    # 注: 须 cd 到 project 根目录下
-    sh install.sh
-    ```
+```sh
+# 适用于 centos7
+# 注: 须 cd 到 project 根目录下
+sh install.sh
+```
 
 ### Sample
 
