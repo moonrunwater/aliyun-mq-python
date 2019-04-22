@@ -2,7 +2,7 @@
 import set_env
 import libaliyunmqclientpython
 import time
-from settings import ACCESS_KEY, GID_CONSUMER, NAMESRV_ADDR, SECRET_KEY
+from settings import NAMESRV_ADDR, ACCESS_KEY, SECRET_KEY, GID_CONSUMER
 
 total = 0
 
@@ -19,14 +19,13 @@ def consume_msg(msg):
     
     return 1
 
-alimq = libaliyunmqclientpython.AliyunMQClient()
-alimq.create_consumer(NAMESRV_ADDR, ACCESS_KEY, SECRET_KEY, GID_CONSUMER)
-alimq.subscribe("TOPIC_huohu_test", "tag_1 || tag_2", consume_msg)
-alimq.start_consumer()
-print("consumer started .....")
+consumer = libaliyunmqclientpython.AliyunConsumer(NAMESRV_ADDR, ACCESS_KEY, SECRET_KEY, GID_CONSUMER)
+consumer.subscribe("TOPIC_huohu_test", "tag_1 || tag_2", consume_msg)
+consumer.start()
+print("aliyun consumer started .....")
 
 # sleep 30 minutes
 time.sleep(30 * 60)
 
-alimq.shutdown_consumer()
-print("consumer shutdown.")
+consumer.shutdown()
+print("aliyun consumer shutdown.")

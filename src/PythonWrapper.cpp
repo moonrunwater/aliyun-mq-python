@@ -73,28 +73,33 @@ class ONSCLIENT_API CustomMsgListener : public MessageListener {
         PyObject* pCallback;
 };
 
-class AliyunMQClient {
+class AliyunProducer {
     public:
-        AliyunMQClient(){}
-
-        void create_producer(const char* namesrv_addr,
+        AliyunProducer(const char* namesrv_addr,
             const char* access_key, const char* secret_key, const char* group_id);
-        void start_producer();
+
+        void start();
         const char* send(const char* topic, const char* tag, const char* body, const char* key);
-        void shutdown_producer();
-
-        void create_consumer(const char* namesrv_addr,
-            const char* access_key, const char* secret_key, const char* group_id);
-        void py_subscribe(const char* topic, const char* subExpression, PyObject* pCallback);
-        void start_consumer();
-        void shutdown_consumer();
+        void shutdown();
 
     private:
         Producer *pProducer;
+};
+
+class AliyunConsumer {
+    public:
+        AliyunConsumer(const char* namesrv_addr,
+            const char* access_key, const char* secret_key, const char* group_id);
+
+        void subscribe(const char* topic, const char* subExpression, PyObject* pCallback);
+        void start();
+        void shutdown();
+
+    private:
         PushConsumer* pushConsumer;
 };
 
-void AliyunMQClient::create_producer(const char* namesrv_addr,
+AliyunProducer::AliyunProducer(const char* namesrv_addr,
     const char* access_key, const char* secret_key, const char* group_id)
 {
     // producer 创建、正常工作的参数，必须输入
@@ -107,13 +112,13 @@ void AliyunMQClient::create_producer(const char* namesrv_addr,
     this->pProducer = ONSFactory::getInstance()->createProducer(factoryInfo);
 }
 
-void AliyunMQClient::start_producer()
+void AliyunProducer::start()
 {
     //在发送消息前，必须调用start方法来启动Producer，只需调用一次即可
     this->pProducer->start();
 }
 
-const char* AliyunMQClient::send(const char* topic, const char* tag, const char* body, const char* key)
+const char* AliyunProducer::send(const char* topic, const char* tag, const char* body, const char* key)
 {
     Message msg(
         topic,// Message Topic
@@ -135,13 +140,13 @@ const char* AliyunMQClient::send(const char* topic, const char* tag, const char*
     return "send error";
 }
 
-void AliyunMQClient::shutdown_producer()
+void AliyunProducer::shutdown()
 {
     // 在应用退出前，必须销毁Producer对象，否则会导致内存泄露等问题
     pProducer->shutdown();
 }
 
-void AliyunMQClient::create_consumer(const char* namesrv_addr,
+AliyunConsumer::AliyunConsumer(const char* namesrv_addr,
     const char* access_key, const char* secret_key, const char* group_id)
 {
     // consumer 创建、正常工作的参数，必须输入
@@ -154,22 +159,22 @@ void AliyunMQClient::create_consumer(const char* namesrv_addr,
     // ensure create GIL, for call Python callback from C
     PyEval_InitThreads();
     // 创建 pushConsumer
-    pushConsumer = ONSFactory::getInstance()->createPushConsumer(factoryInfo);
+    this->pushConsumer = ONSFactory::getInstance()->createPushConsumer(factoryInfo);
 }
 
-void AliyunMQClient::py_subscribe(const char* topic, const char* subExpression, PyObject* pCallback)
+void AliyunConsumer::subscribe(const char* topic, const char* subExpression, PyObject* pCallback)
 {
     pushConsumer->subscribe(topic, subExpression, new CustomMsgListener(pCallback));
 }
 
-void AliyunMQClient::start_consumer()
+void AliyunConsumer::start()
 {
-    pushConsumer->start();
+    this->pushConsumer->start();
 }
 
-void AliyunMQClient::shutdown_consumer()
+void AliyunConsumer::shutdown()
 {
-    // shutdown_consumer is a block call, ensure thread don't hold GIL
+    // shutdown is a block call, ensure thread don't hold GIL
     PyThreadStateUnlock PyThreadUnlock;
     // 在应用退出前，必须销毁 Consumer 对象，否则会导致内存泄露等问题
     pushConsumer->shutdown();
@@ -184,18 +189,21 @@ void hello(const char* name)
 BOOST_PYTHON_MODULE(libaliyunmqclientpython)
 {
     // 类导出成Python可调用的动态链接库文件的方式
-    class_<AliyunMQClient/* 类名 */, boost::noncopyable /* 单例模式 */ >("AliyunMQClient", init<>())
-            .def("create_producer", &AliyunMQClient::create_producer)
-            .def("start_producer", &AliyunMQClient::start_producer)
-            .def("send", &AliyunMQClient::send)
-            .def("shutdown_producer", &AliyunMQClient::shutdown_producer)
-            .def("create_consumer", &AliyunMQClient::create_consumer)
-            .def("subscribe", &AliyunMQClient::py_subscribe)
-            .def("start_consumer", &AliyunMQClient::start_consumer)
-            .def("shutdown_consumer", &AliyunMQClient::shutdown_consumer)
-            ;
+    class_<AliyunProducer/* 类名 */, boost::noncopyable /* 单例模式 */ >
+        ("AliyunProducer", init<const char*, const char*, const char*, const char*>())
+        .def("start", &AliyunProducer::start)
+        .def("send", &AliyunProducer::send)
+        .def("shutdown", &AliyunProducer::shutdown)
+        ;
 
-    class_<Message/* 类名 */>("Message")
+    class_<AliyunConsumer, boost::noncopyable>
+        ("AliyunConsumer", init<const char*, const char*, const char*, const char*>())
+        .def("subscribe", &AliyunConsumer::subscribe)
+        .def("start", &AliyunConsumer::start)
+        .def("shutdown", &AliyunConsumer::shutdown)
+        ;
+
+    class_<Message>("Message")
         .def("getTopic", &Message::getTopic)
         .def("getTag", &Message::getTag)
         .def("getKey", &Message::getKey)
