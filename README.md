@@ -21,12 +21,12 @@
 # 注: 须 cd 到 project 根目录下
 
 # python2
-sh install_python2.sh
+sh install.sh 2
 # python3.6.x, 3.7.x
-sh install_python3.sh
+sh install.sh 3
 ```
 
-> 注: 若安装 python3 时没有将 python3 动态链接库 .so 编译出来（`ldconfig -v | grep python` 没有输出 `libpython3.so -> libpython3.so`）, 还需执行 `sh cp_ld_libpython3.sh`
+> 注: 若安装 python3 时没有将 python3 动态链接库 .so 编译出来（`ldconfig -v | grep python` 没有输出 `libpython3.so -> libpython3.so`）, 还需执行 `sh cp_ld_libpython.sh 3`
 
 
 ### Sample
@@ -35,10 +35,12 @@ sh install_python3.sh
 
     ```sh
     python sample/test_producer.py
+    python3 sample/test_producer.py
     ```
 
 - push consumer
 
     ```sh
     python sample/test_consumer.py
+    python3 sample/test_consumer.py
     ```
