@@ -19,9 +19,15 @@
 ```sh
 # 适用于 centos7
 # 注: 须 cd 到 project 根目录下
+
+# python2
 sh install_python2.sh
+# python3.6.x, 3.7.x
 sh install_python3.sh
 ```
+
+> 注: 若 `ldconfig -v | grep python` 没有输出 `libpython3.so -> libpython3.so`, 还需要执行 `sh cp_ld_libpython3.sh`
+
 
 ### Sample
 
