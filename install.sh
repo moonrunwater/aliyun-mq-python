@@ -6,6 +6,9 @@
 # 打印正在执行的命令
 set -v
 
+# 适用于 centos
+cat /etc/*-release
+
 # 2 or 3
 v=$1
 
@@ -14,6 +17,8 @@ python$v --version
 # 注: 须 cd 到 project 根目录下
 cur_dir=`pwd`
 echo $cur_dir
+
+ldconfig -v | grep python
 
 echo -e "\nboost lib\n"
 mkdir -p /usr/boost/lib
