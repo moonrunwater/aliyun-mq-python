@@ -1,5 +1,3 @@
-# import set_env first, then import libaliyunmqclientpython
-import set_env
 import libaliyunmqclientpython
 from settings import NAMESRV_ADDR, ACCESS_KEY, SECRET_KEY
 

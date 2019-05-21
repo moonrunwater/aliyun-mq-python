@@ -6,20 +6,21 @@
 - boost::python library is a framework for interfacing Python and C++. It allows you to quickly and seamlessly expose C++ classes functions and objects to Python, and vice-versa, using no special tools -- just your C++ compiler.
 
 ### Python Runtime Version
-* python 2.7.x 
+* python 2.7.x
+* python 3.6.x, python 3.7.x
 
 ### Dependency of Python Client
 
 * aliyun-mq-linux-cpp-sdk [download](https://ons-client-sdk.oss-cn-hangzhou.aliyuncs.com/linux_all_in_one/V1.1.2/aliyun-mq-linux-cpp-sdk.tar.gz)	
 * boost-python 1.62.0 [download](https://sourceforge.net/projects/boost/files/boost/1.62.0/boost_1_62_0.tar.gz)
-* python-devel 2.7.x
 
 ### Build and Install
 
 ```sh
 # 适用于 centos7
 # 注: 须 cd 到 project 根目录下
-sh install.sh
+sh install_python2.sh
+sh install_python3.sh
 ```
 
 ### Sample

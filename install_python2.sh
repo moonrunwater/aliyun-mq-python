@@ -6,6 +6,8 @@
 # 打印正在执行的命令
 set -v
 
+python --version
+
 # 注: 须 cd 到 project 根目录下
 cur_dir=`pwd`
 echo $cur_dir
