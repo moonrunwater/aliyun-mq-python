@@ -26,7 +26,7 @@ sh install_python2.sh
 sh install_python3.sh
 ```
 
-> 注: 若 `ldconfig -v | grep python` 没有输出 `libpython3.so -> libpython3.so`, 还需要执行 `sh cp_ld_libpython3.sh`
+> 注: 若安装 python3 时没有将 python3 动态链接库 .so 编译出来（`ldconfig -v | grep python` 没有输出 `libpython3.so -> libpython3.so`）, 还需执行 `sh cp_ld_libpython3.sh`
 
 
 ### Sample
