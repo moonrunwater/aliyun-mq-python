@@ -29,6 +29,7 @@ ldconfig
 ldconfig -v | grep boost
 ldconfig -v | grep python
 
+# https://ons-client-sdk.oss-cn-hangzhou.aliyuncs.com/linux_all_in_one/V1.1.2/aliyun-mq-linux-cpp-sdk.tar.gz
 echo -e "\nlibonsclient4cpp.so\n"
 mkdir -p /usr/aliyun/lib
 cp $cur_dir/aliyun/lib/libonsclient4cpp.so /usr/aliyun/lib
@@ -46,3 +47,5 @@ python$v -c "import libaliyunmqclientpython; print('succeed to import libaliyunm
 
 echo -e "\nlog dir ...\n"
 mkdir -p $HOME/logs/metaq-client4cpp
+
+echo -e "\n===== SUCCESS to install"
