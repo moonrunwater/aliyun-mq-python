@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
 import libaliyunmqclientpython
 from settings import NAMESRV_ADDR, ACCESS_KEY, SECRET_KEY
 

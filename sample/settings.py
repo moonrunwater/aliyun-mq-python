@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
 NAMESRV_ADDR = "..."
 ACCESS_KEY = "..."
 SECRET_KEY = "..."
