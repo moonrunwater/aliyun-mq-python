@@ -20,10 +20,12 @@
 # 适用于 centos7
 # 注: 须 cd 到 project 根目录下
 
+# use ons-cpp-v2.0.0-beta sdk
+
 # python2
-sh install.sh 2
+# sh install-v2.0.0-beta.sh 2
 # python3.6.x, 3.7.x
-sh install.sh 3
+sh install-v2.0.0-beta.sh 3
 ```
 
 > 注: 若安装 python3 时没有将 python3 动态链接库 .so 编译出来（`ldconfig -v | grep python` 没有输出 `libpython3.so -> libpython3.so`）, 还需执行 `sh cp_ld_libpython.sh 3`
