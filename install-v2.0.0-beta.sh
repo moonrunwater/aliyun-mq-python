@@ -13,12 +13,34 @@ cat /etc/*-release
 v=$1
 
 python$v --version
+ldconfig -v | grep python
 
 # 注: 须 cd 到 project 根目录下
 cur_dir=`pwd`
 echo $cur_dir
 
-ldconfig -v | grep python
+
+########## 安装之前，先删除可能已安装的依赖共享库 ##########
+rm -rf /usr/local/boost_1_62_0
+rm -rf /usr/local/alibaba
+# /etc/ld.so.conf
+# /usr/local/boost_1_62_0/lib64
+# /usr/local/alibaba/mq/lib
+awk '{ sub(/\/usr\/local\/boost_1_62_0\/lib64/,""); print $0 }' /etc/ld.so.conf > /etc/ld.so.conf.tmp && mv -f /etc/ld.so.conf.tmp /etc/ld.so.conf
+awk '{ sub(/\/usr\/local\/alibaba\/mq\/lib/,""); print $0 }' /etc/ld.so.conf > /etc/ld.so.conf.tmp && mv -f /etc/ld.so.conf.tmp /etc/ld.so.conf
+cat /etc/ld.so.conf
+
+rm -rf /usr/boost
+rm -rf /usr/aliyun
+rm -f /etc/ld.so.conf.d/*.conf
+ls /etc/ld.so.conf.d
+
+ldconfig
+ldconfig -v | grep boost
+ldconfig -v | grep libonsclient4cpp
+ldconfig -v | grep libaliyunmqclientpython
+########## 安装之前，先删除可能已安装的依赖共享库 ##########
+
 
 echo -e "\nboost lib\n"
 mkdir -p /usr/boost/lib
