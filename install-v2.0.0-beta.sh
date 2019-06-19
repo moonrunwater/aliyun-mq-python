@@ -32,7 +32,8 @@ cat /etc/ld.so.conf
 
 rm -rf /usr/boost
 rm -rf /usr/aliyun
-rm -f /etc/ld.so.conf.d/*.conf
+rm -f /etc/ld.so.conf.d/boost.conf
+rm -f /etc/ld.so.conf.d/aliyun.conf
 ls /etc/ld.so.conf.d
 
 ldconfig
